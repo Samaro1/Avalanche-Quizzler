@@ -1,0 +1,159 @@
+*{
+    margin: 0;
+}
+.navbar{
+  background:url("../bg.jpg");
+  height: 50vh;
+}
+h1{
+  margin-bottom: 0.2px;
+  margin-left: 35%;
+}
+p{
+  margin-top: 0.4px;
+  margin-left: 25vw;
+}
+.nav{
+  font-size: larger;
+  display: flex;
+  justify-content: center;
+  color: #ffffff;
+}
+.navinnav p { 
+  margin-top: 2px;     
+  color: #ddd;   
+  margin-left: 35%;   
+}
+.navinnav{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 10vh;
+}
+.icon{
+  display: flex;
+  margin-left: 30%;
+  height: 45%;
+  width: 47%;
+  border-radius: 70%;
+  object-fit: cover;
+  overflow-x: hidden;
+}
+.container h1{
+  color: #861010;
+}
+.container p{
+  font-weight: bold;
+  display: flex;
+  align-self: center;
+}
+/* Quiz header */
+.quiz-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;       
+  margin-bottom: 1rem;
+  width: 100%;
+  padding: 0.5rem 1rem;
+}
+
+/* Back button styling */
+.back-btn {
+  background: white;
+  border: 1px solid #861010;
+  color: #861010;
+  font-size: 0.95rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.back-btn:hover {
+  background: #861010;
+  color: white;
+}
+
+/* Progress counter */
+#progress {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #444;
+  margin: 0;
+  margin-left: 3vw;
+  margin-top: 3vh;
+}
+#question{
+  margin-left: 3vw;
+  font-size: 38;
+}
+.options {
+  margin-top: 3vh;
+  display: grid;
+  gap: 1rem;
+  margin-left: 3vw;
+  margin-right: 3vw;
+  margin-bottom: 1.5rem;
+  text-align: left;
+  font-size: 18;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #ffff;
+  border:1px solid rgba(168, 19, 19, 0.2);
+  padding: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.option input {
+  accent-color: #861010;
+  transform: scale(1.3);
+}
+
+.option:hover {
+  background: rgba(168, 19, 19, 0.1);
+}
+
+
+/* Submit / Next buttons */
+#submit, #next, #restart {
+  padding: 0.8rem 1.5rem;
+  margin: 0.5rem;
+  border: none;
+  border-radius: 6px;
+  margin-left: 40vw;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.25s ease;
+}
+
+#submit {
+  background: #861010;
+  color: #fff;
+  margin-left: 45vw;
+}
+#submit:hover {
+  background: #fff;
+  color: #861010;
+  border: 1px solid #861010;
+
+}
+.option.correct {
+  background-color: #4CAF50; /* green */
+  color: white;
+  border-radius: 6px;
+  padding: 8px;
+}
+
+.option.incorrect {
+  background-color: #F44336; /* red */
+  color: white;
+  border-radius: 6px;
+  padding: 8px;
+}
+

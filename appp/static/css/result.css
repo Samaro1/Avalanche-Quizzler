@@ -1,0 +1,177 @@
+/* ====== GENERAL LAYOUT ====== */
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #ffffff;
+  color: #222;
+}
+h1{
+  margin-bottom: 0.2px;
+  margin-left: 35%;
+}
+p{
+  margin-top: 0.4px;
+}
+.container {
+  max-width: 100%;
+  margin: 40px auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.icon{
+  display: flex;
+  margin-left: 30%;
+  height: 45%;
+  width: 47%;
+  border-radius: 70%;
+  object-fit: cover;
+  overflow-x: hidden;
+}
+.navbar{
+  background:url("../bg.jpg");
+  height: 50vh;
+}
+.nav{
+  font-size: larger;
+  display: flex;
+  justify-content: center;
+  color: #ffffff;
+}
+.navinnav p { 
+  margin-top: 2px;     
+  color: #ddd;   
+  margin-left: 35%;   
+}
+
+.navinnav{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 10vh;
+}
+
+/* ====== INTRO SECTION ====== */
+.results-intro {
+  margin-bottom: 30px;
+}
+
+.results-title {
+  font-size: 1.5rem;
+  color: #000000;
+  margin-bottom: 8px;
+}
+
+.results-sub {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+.back-btn {
+  display: inline-block;
+  font-size: 0.9rem;
+  color: #861010;
+  text-decoration: none;
+  border: 1px solid #861010;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  background: #861010;
+  color: #fff;
+}
+
+/* ====== RESULTS SECTION ====== */
+.results-section {
+  display: flex;
+  justify-content: center;
+}
+
+.results-card {
+  background: #fafafa;
+  padding: 30px 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 500px;
+}
+
+.score-wrap {
+  margin-bottom: 20px;
+}
+
+.score-label {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.big-score {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #000000;
+  margin-bottom: 8px;
+}
+
+.score-summary {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* ====== MESSAGES ====== */
+.result-message {
+  margin: 15px 0 25px 0;
+  font-size: 1rem;
+}
+
+.eligible-msg {
+  color: #1e1f1e;
+}
+
+.not-eligible-msg {
+  color: #000000;
+}
+/* ====== ACTION BUTTONS ====== */
+.results-actions button {
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin: 5px;
+  transition: background 0.3s ease;
+}
+
+.proceed-btn {
+  background: #861010;
+  color: #fff;
+}
+
+.proceed-btn:hover {
+  background: #861010;
+}
+
+.restart-btn {
+  background: #861010;
+  color: #fff;
+}
+
+.restart-btn:hover {
+  background: #fff;
+  color: #861010;
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 600px) {
+  .big-score {
+    font-size: 2rem;
+  }
+  .results-card {
+    padding: 20px 15px;
+  }
+}

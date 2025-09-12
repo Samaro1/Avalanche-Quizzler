@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Choose Category — Avalanche Quiz</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="navbar">
+     <nav class="nav">
+      <div class=" navinnav">
+        <img class="icon" src="{{url_for('static',filename='logo.jpg')}}" alt="Avalanche logo">
+       <h1>The Avalanche Quizzler</h1>
+       <p>Secure. Scalable. Sustainable</p>
+      </div>
+     </nav>
+  </div>
+<main class="container">
+  <h1>AVALANCHE BLOCKCHAIN QUIZ</h1>
+  <P>Test your Avalanche knowledge, choose  a catgory to be tested on. Every correct answer gets you closer to the peak</P>
+  <div class="cards-wrap">
+    <ul class="categ">
+      <li class="onecard">
+        <button class="card" onclick="startQuiz('nfts')">
+          <div class="card-img-wrapper">
+            <img src= "{{ url_for('static', filename='nftpic.jpg') }}"alt="NFTs" class="card-img">
+          </div>
+          <div class="card-info">
+            <h2>NFTs</h2>
+            <p>Dive into the world of digital art & tokens 💎</p>
+          </div>
+        </button>
+      </li>
+
+      <li class="onecard">
+        <button class="card" onclick="startQuiz('gaming')">
+          <div class="card-img-wrapper">
+            <img src="{{ url_for('static', filename='gamingpic.jpg') }}"alt="Gaming" class="card-img">
+          </div>
+          <div class="card-info">
+            <h2>Gaming</h2>
+            <p>Test your knowledge of the gaming world 🎮</p>
+          </div>
+        </button>
+      </li>
+
+      <li class="onecard">
+        <button class="card" onclick="startQuiz('builders')">
+          <div class="card-img-wrapper">
+            <img src="{{ url_for('static', filename='builderspic.jpg') }}" alt="Builders" class="card-img">
+          </div>
+          <div class="card-info">
+            <h2>Builders</h2>
+            <p>Explore creativity and innovation 🔨</p>
+          </div>
+        </button>
+      </li>
+    </ul>
+  </div>
+</main>
+  <script>
+    function startQuiz(category) {
+
+      fetch(`/api/start_quiz/${category}`)
+        .then(response => {
+          if (!response.ok) throw new Error(response.statusText);
+          return response.json();
+        })
+        .then(data => {
+          if (data.error) {
+            document.getElementById('status').textContent = data.error;
+            return;
+          }
+
+          // Now that the quiz is initialized in session, redirect occurs
+          window.location.href = `/quiz/${category}`;
+        })
+        .catch(err => {
+          document.getElementById('status').textContent = 'Error starting quiz';
+          console.error(err);
+        });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Results — Avalanche Quiz</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/result.css') }}">
+</head>
+<body>
+  <div class="navbar">
+    <nav class="nav">
+      <div class="navinnav">
+        <img class="icon" src="{{ url_for('static', filename='logo.jpg') }}" alt="Avalanche logo">
+        <h1>The Avalanche Quizzler</h1>
+        <p>Secure. Scalable. Sustainable</p>
+      </div>
+    </nav>
+  </div>
+
+  <main class="container">
+    <section class="results-intro">
+      <h2 class="results-title">AVALANCHE BLOCKCHAIN QUIZ</h2>
+      <p class="results-sub">Test your Avalanche knowledge. Your results are below.</p>
+      <a class="back-btn" href="/index">&larr; Back to Categories</a>
+    </section>
+
+    <section id="results-section" class="results-section">
+      <div class="results-card">
+        <div class="score-wrap">
+          <div class="score-label">Total Score:</div>
+          <div id="big-score" class="big-score">—</div>
+          <div id="score-summary" class="score-summary"></div>
+        </div>
+
+        <div id="result-message" class="result-message"></div>
+
+        <div id="actions" class="results-actions"></div>
+      </div>
+    </section>
+  </main>
+<script>
+    (function () {
+      const category = window.location.pathname.split('/')[2];
+
+      function createButton(text, cls, handler) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = cls;
+        btn.textContent = text;
+        btn.addEventListener('click', handler);
+        return btn;
+      }
+
+      function loadResults() {
+        fetch(`/api/results/${category}`)
+          .then(response => {
+            if (!response.ok) throw new Error(response.statusText);
+            return response.json();
+          })
+          .then(data => {
+            const score = data.score ?? 0;
+            const total = data.total ?? 3;
+
+            document.getElementById('big-score').textContent = `${score} / ${total}`;
+            document.getElementById('score-summary').textContent = (score === total) ? 'Perfect!!' : '';
+
+            const messageNode = document.getElementById('result-message');
+            let feedbackText = '';
+            if (score === total) {
+              feedbackText = '🎉 Perfect!! Proceed to claim your NFT';
+            } else if (score === total - 1) {
+              feedbackText = 'So close — better luck next time';
+            } else {
+              feedbackText = 'Not there yet — better luck next time';
+            }
+
+            const cls = (score === total) ? 'eligible-msg' : 'not-eligible-msg';
+            messageNode.innerHTML = `<p class="${cls}">${feedbackText}</p>`;
+
+            const actions = document.getElementById('actions');
+            actions.innerHTML = '';
+
+            if (data.nft_eligible) {
+              const proceed = createButton('Proceed', 'proceed-btn', () => {
+                window.location.href = `/claim/${category}`;
+              });
+              actions.appendChild(proceed);
+            } else {
+            const restart = createButton('Restart', 'restart-btn', async () => {
+            try {
+              const resp = await fetch(`/api/start_quiz/${category}`, { method: 'GET' });
+              if (!resp.ok) {
+                let errText = resp.statusText;
+                try { errText = (await resp.json()).error || errText; } catch(e){ /* ignore */ }
+                throw new Error(errText || `HTTP ${resp.status}`);
+              }
+
+              // Success: go straight to quiz page
+              window.location.href = `/quiz/${category}`;
+            } catch (err) {
+              console.error('Failed to restart quiz:', err);
+              alert('Could not restart quiz. Try again.\n\n' + (err.message || 'Unknown error'));
+            }
+          });
+          actions.appendChild(restart);
+            }
+          })
+          .catch(err => {
+            document.getElementById('score-summary').textContent = 'Error loading results';
+            console.error(err);
+          });
+      }
+
+      // init
+      loadResults();
+    })();
+  </script>
+</body>
+</html>

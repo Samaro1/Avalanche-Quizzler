@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Quiz — Avalanche Quiz</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='css/question.css') }}">
+</head>
+<body>
+
+  <div class="navbar">
+    <nav class="nav">
+      <div class="navinnav">
+        <img class="icon" src="{{url_for('static',filename='logo.jpg')}}" alt="Avalanche logo">
+        <h1>The Avalanche Quizzler</h1>
+        <p>Secure. Scalable. Sustainable</p>
+      </div>
+    </nav>
+  </div>
+  
+  <main class="container">
+    <h1>AVALANCHE BLOCKCHAIN QUIZ</h1>
+    <P>Test your Avalanche knowledge, choose  a catgory to be tested on. Every correct answer gets you closer to the peak</P>
+
+    <div class="quiz-header">
+    <button class="back-btn" onclick="window.location.href='/index'"> < Back to Categories</button>
+    </div>
+
+    <h2 id="progress"></h2>
+    <!-- Question text -->
+    <div id="question" class="question-text"></div>
+
+    <!-- Answer Options -->
+    <form id="quiz-form" class="options">
+      <label class="option">
+        <input type="radio" name="answer" value="A" id="A">
+        <span class="text" id="A-text"></span>
+      </label>
+      <label class="option">
+        <input type="radio" name="answer" value="B" id="B">
+        <span class="text" id="B-text"></span>
+      </label>
+      <label class="option">
+        <input type="radio" name="answer" value="C" id="C">
+        <span class="text" id="C-text"></span>
+      </label>
+      <label class="option">
+        <input type="radio" name="answer" value="D" id="D">
+        <span class="text" id="D-text"></span>
+      </label>
+    </form>
+
+    <!-- Feedback + Controls -->
+    <div id="feedback" class="status"></div>
+    <button id="submit">Submit</button>
+    <button id="next" onclick="getNextQuestion()" style="display:none;">Next Question</button>
+    <button id="restart" onclick="window.location.href='/index'" style="display:none;">Restart Quiz</button>
+  </main>
+  <script>
+  const category = window.location.pathname.split('/')[2];
+  let questionId = null;
+  let answered = false;
+  let currentIndex = 0;
+  const totalQuestions = 3; // always 3
+
+  function loadQuestion() {
+    document.getElementById('feedback').textContent = 'Loading question...';
+    answered = false;
+
+    fetch(`/api/quiz/${category}/questions`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.finished || currentIndex >= totalQuestions) {
+          window.location.href = `/results/${category}`;
+          return;
+        }
+
+        // Save ID
+        questionId = data.question.id;
+
+        // Progress display
+        document.getElementById('progress').textContent =
+          `Question ${currentIndex + 1} of ${totalQuestions}`;
+
+        // Set question text
+        document.getElementById('question').textContent = data.question.question;
+
+        // Set answers
+        ['A', 'B', 'C', 'D'].forEach(opt => {
+          document.getElementById(opt).checked = false;
+          document.getElementById(opt).disabled = false;
+          document.getElementById(opt + "-text").textContent = `${opt}. ${data.question[opt]}`;
+          document.getElementById(opt).parentElement.classList.remove("correct", "incorrect");
+        });
+
+        document.getElementById('feedback').textContent = '';
+        document.getElementById('submit').style.display = 'block';
+        document.getElementById('next').style.display = 'none';
+      });
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    if (answered) return;
+
+    const selected = document.querySelector('input[name="answer"]:checked');
+    if (!selected) {
+      document.getElementById('feedback').textContent = 'Please select an option!';
+      return;
+    }
+
+    const answer = selected.value;
+    answered = true;
+    document.getElementById('feedback').textContent = 'Submitting...';
+
+    fetch('/api/submit_answer', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question_id: questionId, answer, category })
+    })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('feedback').textContent = '';
+
+        document.querySelectorAll('input[name="answer"]').forEach(r => r.disabled = true);
+
+        if (data.correct) {
+          selected.parentElement.classList.add("correct");
+        } else {
+          selected.parentElement.classList.add("incorrect");
+        }
+
+        document.getElementById('submit').style.display = 'none';
+
+        if (currentIndex < totalQuestions - 1) {
+          // more questions left
+          currentIndex++;
+          document.getElementById('next').style.display = 'block';
+        } else {
+          // finished all questions
+          setTimeout(() => {
+            window.location.href = `/results/${category}`;
+          }, 1500);
+        }
+      });
+  }
+
+  function getNextQuestion() {
+    loadQuestion();
+  }
+
+  // Initial load
+  loadQuestion();
+  document.getElementById("submit").addEventListener("click", handleSubmit);
+</script>
+
+</body>
+</html>
