@@ -13,8 +13,10 @@ def create_app():
     load_dotenv(dotenv_path=env_path)
 
     app = Flask(__name__)
-    db_path = os.path.abspath('/home/samaro/avalanche/data/avalanche.db')
-    app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
+
+    project_root = Path(__file__).resolve().parent.parent
+    db_file_path= project_root / "data" / "avalanche.db"
+    app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_file_path.as_posix()}"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
     app.config["SESSION_TYPE"] = "sqlalchemy"
